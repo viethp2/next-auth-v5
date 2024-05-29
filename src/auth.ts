@@ -20,6 +20,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
   callbacks: {
+    signIn: async ({ user, account }) => {
+      // Allow OAuth without email verification.
+      if (account?.provider !== "credentials") return true;
+
+      // Prevent sign in without email verification.
+      if(!user.id) return false
+      const existingUser = await getUserById(user.id);
+      if (!existingUser?.emailVerified) return false;
+
+      return true;
+    },
     // This callback is used to modify the JWT token and pass it to the session callback.
     jwt: async ({ token }) => {
       if (!token.sub) {
