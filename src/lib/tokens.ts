@@ -9,7 +9,7 @@ import { db } from "./db";
 
 export const generateTwoFactorToken = async (email: string) => {
   const token = crypto.randomInt(100_000, 1_000_000).toString();
-  const expiresAt = new Date(new Date().getTime() + 1000 * 60 * 60);
+  const expiresAt = new Date(new Date().getTime() + 1000 * 60 * 5);
 
   const existingToken = await getTwoFactorTokenByEmail(email);
   if (existingToken) {
